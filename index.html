@@ -11,10 +11,22 @@
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(180deg,#dff3ff,#b7e3ff,#9ad4ff);
+    background:linear-gradient(180deg,#e8f7ff,#c9eaff,#b0ddff);
     font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color:#003049;
+    overflow:hidden;
   }
+
+  /* iOS風の光の丸いボケ */
+  .bubble {
+    position:absolute;
+    border-radius:50%;
+    filter:blur(40px);
+    opacity:0.45;
+  }
+  .b1 { width:260px; height:260px; background:#ffffff; top:10%; left:15%; }
+  .b2 { width:300px; height:300px; background:#d0f0ff; bottom:15%; right:10%; }
+  .b3 { width:180px; height:180px; background:#ffffff; top:55%; left:35%; }
 
   .icon {
     width:220px;
@@ -22,8 +34,9 @@
     border-radius:50%;
     overflow:hidden;
     animation:spin 12s linear infinite;
-    box-shadow:0 8px 30px rgba(0,0,0,0.15);
+    box-shadow:0 8px 30px rgba(0,0,0,0.12);
     cursor:pointer;
+    backdrop-filter:blur(20px);
   }
 
   .icon img {
@@ -51,14 +64,19 @@
     border-radius:20px;
     text-decoration:none;
     color:#003049;
-    background:rgba(255,255,255,0.6);
-    backdrop-filter:blur(10px);
+    background:rgba(255,255,255,0.55);
+    backdrop-filter:blur(12px);
     font-size:13px;
     box-shadow:0 4px 12px rgba(0,0,0,0.1);
   }
 </style>
 </head>
 <body>
+
+<!-- iOS風の光のボケ -->
+<div class="bubble b1"></div>
+<div class="bubble b2"></div>
+<div class="bubble b3"></div>
 
 <div class="icon" id="icon">
   <img src="aoi.png" alt="haru icon">
