@@ -6,84 +6,56 @@
 <style>
   body {
     margin:0;
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    background:linear-gradient(180deg,#e8f7ff,#c9eaff,#b0ddff);
-    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:linear-gradient(180deg,#b7e3ff,#dff3ff);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    text-align:center;
     color:#003049;
-    overflow:hidden;
   }
 
   .title {
-    margin-top:40px;
-    font-size:60px;
+    margin-top:60px;
+    font-size:48px;
     font-weight:700;
+    letter-spacing:0.05em;
   }
+
   .subtitle {
-    margin-top:6px;
-    font-size:22px;
+    font-size:20px;
     opacity:0.7;
-  }
-
-  .bubble {
-    position:absolute;
-    border-radius:50%;
-    filter:blur(40px);
-    opacity:0.45;
-  }
-  .b1 { width:300px; height:300px; background:#ffffff; top:10%; left:15%; }
-  .b2 { width:360px; height:360px; background:#d0f0ff; bottom:15%; right:10%; }
-  .b3 { width:220px; height:220px; background:#ffffff; top:55%; left:35%; }
-
-  .glow {
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:400px;
-    height:400px;
-    transform:translate(-50%,-50%);
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.0) 70%);
-    filter:blur(60px);
-    pointer-events:none;
+    margin-bottom:40px;
   }
 
   .icon {
-    position:relative;
-    width:340px;
-    height:340px;
+    width:260px;
+    aspect-ratio:1/1;
     border-radius:50%;
     overflow:hidden;
-    animation:spin 12s linear infinite;
-    box-shadow:0 12px 40px rgba(0,0,0,0.12);
-    cursor:pointer;
-    margin-top:40px;
+    margin:auto;
+    border:6px solid #ffffff;
+    box-shadow:0 0 30px rgba(0,0,0,0.15);
+    animation:spin 10s linear infinite;
   }
+
   .icon img {
     width:100%;
     height:100%;
     object-fit:cover;
   }
+
   @keyframes spin {
-    from { transform:rotate(0deg); }
-    to   { transform:rotate(360deg); }
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
   }
 
-  /* iOS風プレイヤー */
   .player {
-    margin-top:30px;
-    width:340px;
-    padding:16px;
-    border-radius:20px;
-    background:rgba(255,255,255,0.55);
-    backdrop-filter:blur(12px);
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    font-size:16px;
-    display:flex;
+    margin-top:60px;
+    display:inline-flex;
     align-items:center;
-    gap:14px;
+    gap:16px;
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.1);
+    padding:12px 20px;
   }
 
   .album {
@@ -92,52 +64,50 @@
     border-radius:12px;
     overflow:hidden;
   }
+
   .album img {
     width:100%;
     height:100%;
     object-fit:cover;
   }
 
+  .song {
+    font-size:16px;
+    font-weight:500;
+  }
+
   .links {
-    margin-top:30px;
+    margin-top:40px;
     display:flex;
     flex-direction:column;
+    align-items:center;
     gap:12px;
   }
+
   .link-btn {
-    width:260px;
+    width:240px;
     padding:12px;
-    border-radius:18px;
-    text-align:center;
-    text-decoration:none;
+    border-radius:20px;
+    background:#fff;
     color:#003049;
-    background:rgba(255,255,255,0.55);
-    backdrop-filter:blur(12px);
-    font-size:15px;
+    text-decoration:none;
     box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    font-size:15px;
   }
 </style>
 </head>
 <body>
 
-<div class="bubble b1"></div>
-<div class="bubble b2"></div>
-<div class="bubble b3"></div>
-
 <div class="title">はるうー</div>
 <div class="subtitle">@haru._.uwu</div>
 
-<div class="glow"></div>
-
-<div class="icon" id="icon">
+<div class="icon">
   <img src="aoi.png" alt="haru icon">
 </div>
 
 <div class="player" id="status">
-  <div class="album">
-    <img src="sweettweet.png">
-  </div>
-  Sweet Tweet — tap icon to play
+  <div class="album"><img src="sweettweet.png" alt="Sweet Tweet"></div>
+  <div class="song">Sweet Tweet — click icon to play</div>
 </div>
 
 <div class="links">
@@ -149,7 +119,7 @@
 <audio id="player" src="sweettweet.mp3"></audio>
 
 <script>
-  const icon = document.getElementById('icon');
+  const icon = document.querySelector('.icon');
   const player = document.getElementById('player');
   const status = document.getElementById('status');
   let playing = false;
@@ -157,11 +127,11 @@
   icon.addEventListener('click', () => {
     if (!playing) {
       player.play();
-      status.innerHTML = '<div class="album"><img src="sweettweet.png"></div>Sweet Tweet — playing';
+      status.querySelector('.song').textContent = "Sweet Tweet — playing";
       playing = true;
     } else {
       player.pause();
-      status.innerHTML = '<div class="album"><img src="sweettweet.png"></div>Sweet Tweet — paused';
+      status.querySelector('.song').textContent = "Sweet Tweet — paused";
       playing = false;
     }
   });
