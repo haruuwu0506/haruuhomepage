@@ -79,15 +79,18 @@
   }
 
   .player {
-    margin-top: 60px;
-    display: inline-flex;
-    align-items: center;
-    gap: 16px;
+    margin: 60px auto 0;
+    width: min(420px, 92vw);
     background: #fff;
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 12px 20px;
-    max-width: 100%;
+    padding: 16px 20px 20px;
+  }
+
+  .player-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
 
   .album {
@@ -107,8 +110,73 @@
 
   .song {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     text-align: left;
+  }
+
+  .status {
+    font-size: 13px;
+    opacity: 0.65;
+    text-align: left;
+    margin-top: 2px;
+  }
+
+  .seek {
+    width: 100%;
+    margin: 16px 0 4px;
+    accent-color: #0077b6;
+    cursor: pointer;
+  }
+
+  .times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    opacity: 0.65;
+  }
+
+  .controls {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .ctrl-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: #eef7fd;
+    color: #003049;
+    font-size: 17px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ctrl-btn:hover {
+    background: #dff0fb;
+  }
+
+  .play-btn {
+    width: 56px;
+    height: 56px;
+    background: #0077b6;
+    color: #fff;
+    font-size: 22px;
+  }
+
+  .play-btn:hover {
+    background: #0096c7;
+  }
+
+  .ctrl-btn:focus-visible,
+  .seek:focus-visible {
+    outline: 3px solid #0077b6;
+    outline-offset: 3px;
   }
 
   .hint {
@@ -161,16 +229,34 @@
 
   <div>
     <div class="player">
-      <div class="album"><img src="sweettweet.png" alt="Sweet Tweetのアートワーク"></div>
-      <div class="song" id="status">Sweet Tweet — click icon to play</div>
+      <div class="player-head">
+        <div class="album"><img src="sweettweet.png" alt="Sweet Tweetのアートワーク"></div>
+        <div>
+          <div class="song">Sweet Tweet</div>
+          <div class="status" id="status">停止中</div>
+        </div>
+      </div>
+
+      <input class="seek" id="seek" type="range" min="0" max="1000" value="0" aria-label="再生位置">
+      <div class="times">
+        <span id="current">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+
+      <div class="controls">
+        <button class="ctrl-btn" id="back" type="button" aria-label="10秒戻る">⏮</button>
+        <button class="ctrl-btn play-btn" id="play" type="button" aria-label="再生・一時停止">▶</button>
+        <button class="ctrl-btn" id="stop" type="button" aria-label="停止">⏹</button>
+        <button class="ctrl-btn" id="forward" type="button" aria-label="10秒進む">⏭</button>
+      </div>
     </div>
-    <p class="hint">アイコンを押すと曲が再生されます</p>
+    <p class="hint">円盤を押しても再生・一時停止できます</p>
   </div>
 
   <nav class="links" aria-label="リンク集">
-    <a class="link-btn" href="https://www.instagram.com/haru._.uwu" target="_blank" rel="noopener">Instagram</a>
+    <a class="link-btn" href="https://www.instagram.com/haru._.uwu?avpt=MXI1NHAxdDgydmw0eQ%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener">Instagram</a>
     <a class="link-btn" href="https://line.me/" target="_blank" rel="noopener">LINE</a>
-    <a class="link-btn" href="https://supercell.com/en/games/brawlstars/" target="_blank" rel="noopener">Brawl Stars</a>
+    <a class="link-btn" href="https://link.brawlstars.com/invite/friend/en/?tag=2Q2VRQRQ8V" target="_blank" rel="noopener">Brawl Stars</a>
   </nav>
 
   <footer>© 2026 はるうー</footer>
@@ -182,20 +268,85 @@
   const disc = document.getElementById('disc');
   const player = document.getElementById('player');
   const status = document.getElementById('status');
+  const playBtn = document.getElementById('play');
+  const stopBtn = document.getElementById('stop');
+  const backBtn = document.getElementById('back');
+  const forwardBtn = document.getElementById('forward');
+  const seek = document.getElementById('seek');
+  const currentEl = document.getElementById('current');
+  const durationEl = document.getElementById('duration');
 
-  disc.addEventListener('click', () => {
+  function formatTime(sec) {
+    if (!isFinite(sec)) return "0:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return m + ":" + String(s).padStart(2, "0");
+  }
+
+  function syncUI() {
+    if (player.paused) {
+      playBtn.textContent = "▶";
+      if (player.currentTime === 0) {
+        status.textContent = "停止中";
+      } else if (player.ended) {
+        status.textContent = "停止中";
+      } else {
+        status.textContent = "一時停止中";
+      }
+    } else {
+      playBtn.textContent = "⏸";
+      status.textContent = "再生中";
+    }
+  }
+
+  function togglePlay() {
     if (player.paused) {
       player.play();
-      status.textContent = "Sweet Tweet — playing";
     } else {
       player.pause();
-      status.textContent = "Sweet Tweet — paused";
+    }
+  }
+
+  disc.addEventListener('click', togglePlay);
+  playBtn.addEventListener('click', togglePlay);
+
+  stopBtn.addEventListener('click', () => {
+    player.pause();
+    player.currentTime = 0;
+    syncUI();
+  });
+
+  backBtn.addEventListener('click', () => {
+    player.currentTime = Math.max(0, player.currentTime - 10);
+  });
+
+  forwardBtn.addEventListener('click', () => {
+    if (isFinite(player.duration)) {
+      player.currentTime = Math.min(player.duration, player.currentTime + 10);
     }
   });
 
-  player.addEventListener('ended', () => {
-    status.textContent = "Sweet Tweet — click icon to play";
+  player.addEventListener('loadedmetadata', () => {
+    durationEl.textContent = formatTime(player.duration);
   });
+
+  player.addEventListener('timeupdate', () => {
+    currentEl.textContent = formatTime(player.currentTime);
+    if (isFinite(player.duration) && player.duration > 0) {
+      seek.value = Math.round((player.currentTime / player.duration) * 1000);
+    }
+  });
+
+  seek.addEventListener('input', () => {
+    if (isFinite(player.duration) && player.duration > 0) {
+      player.currentTime = (seek.value / 1000) * player.duration;
+    }
+  });
+
+  player.addEventListener('play', syncUI);
+  player.addEventListener('pause', syncUI);
+  player.addEventListener('ended', syncUI);
+  syncUI();
 </script>
 
 </body>
