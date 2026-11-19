@@ -2,138 +2,199 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>haru — Sweet Tweet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="はるうーのプロフィールページ。好きな曲 Sweet Tweet が再生できます。">
+<meta name="theme-color" content="#b7e3ff">
+<link rel="icon" href="aoi.png">
+<title>はるうー — プロフィール</title>
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
-    margin:0;
-    background:linear-gradient(180deg,#b7e3ff,#dff3ff);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    text-align:center;
-    color:#003049;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #b7e3ff, #dff3ff);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    text-align: center;
+    color: #003049;
+  }
+
+  main {
+    padding: 0 16px 48px;
   }
 
   .title {
-    margin-top:60px;
-    font-size:48px;
-    font-weight:700;
-    letter-spacing:0.05em;
+    margin: 60px 0 0;
+    font-size: clamp(36px, 10vw, 48px);
+    font-weight: 700;
+    letter-spacing: 0.05em;
   }
 
   .subtitle {
-    font-size:20px;
-    opacity:0.7;
-    margin-bottom:40px;
+    font-size: 20px;
+    opacity: 0.7;
+    margin: 8px 0 40px;
   }
 
+  /* 円盤のアイコン: レコードのように回転させる */
   .icon {
-    width:260px;
-    aspect-ratio:1/1;
-    border-radius:50%;
-    overflow:hidden;
-    margin:auto;
-    border:6px solid #ffffff;
-    box-shadow:0 0 30px rgba(0,0,0,0.15);
-    animation:spin 10s linear infinite;
+    display: block;
+    width: min(260px, 70vw);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+    padding: 0;
+    background: none;
+    border: 6px solid #ffffff;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    animation: spin 10s linear infinite;
   }
 
   .icon img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .icon:focus-visible,
+  .link-btn:focus-visible {
+    outline: 3px solid #0077b6;
+    outline-offset: 3px;
   }
 
   @keyframes spin {
-    from {transform:rotate(0deg);}
-    to {transform:rotate(360deg);}
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon {
+      animation: none;
+    }
   }
 
   .player {
-    margin-top:60px;
-    display:inline-flex;
-    align-items:center;
-    gap:16px;
-    background:#fff;
-    border-radius:20px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.1);
-    padding:12px 20px;
+    margin-top: 60px;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 12px 20px;
+    max-width: 100%;
   }
 
   .album {
-    width:60px;
-    height:60px;
-    border-radius:12px;
-    overflow:hidden;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
   }
 
   .album img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .song {
-    font-size:16px;
-    font-weight:500;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+  }
+
+  .hint {
+    margin-top: 12px;
+    font-size: 13px;
+    opacity: 0.6;
   }
 
   .links {
-    margin-top:40px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
 
   .link-btn {
-    width:240px;
-    padding:12px;
-    border-radius:20px;
-    background:#fff;
-    color:#003049;
-    text-decoration:none;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    font-size:15px;
+    width: min(240px, 80vw);
+    padding: 12px;
+    border-radius: 20px;
+    background: #fff;
+    color: #003049;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 15px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+  }
+
+  footer {
+    margin-top: 56px;
+    font-size: 12px;
+    opacity: 0.55;
   }
 </style>
 </head>
 <body>
 
-<div class="title">はるうー</div>
-<div class="subtitle">@haru._.uwu</div>
+<main>
+  <h1 class="title">はるうー</h1>
+  <p class="subtitle">@haru._.uwu</p>
 
-<div class="icon">
-  <img src="aoi.png" alt="haru icon">
-</div>
+  <button class="icon" id="disc" type="button" aria-label="Sweet Tweetを再生・一時停止">
+    <img src="aoi.png" alt="はるうーのアイコン">
+  </button>
 
-<div class="player" id="status">
-  <div class="album"><img src="sweettweet.png" alt="Sweet Tweet"></div>
-  <div class="song">Sweet Tweet — click icon to play</div>
-</div>
+  <div>
+    <div class="player">
+      <div class="album"><img src="sweettweet.png" alt="Sweet Tweetのアートワーク"></div>
+      <div class="song" id="status">Sweet Tweet — click icon to play</div>
+    </div>
+    <p class="hint">アイコンを押すと曲が再生されます</p>
+  </div>
 
-<div class="links">
-  <a class="link-btn" href="https://www.instagram.com/haru._.uwu" target="_blank">Instagram</a>
-  <a class="link-btn" href="https://line.me/" target="_blank">LINE</a>
-  <a class="link-btn" href="https://supercell.com/en/games/brawlstars/" target="_blank">Brawl Stars</a>
-</div>
+  <nav class="links" aria-label="リンク集">
+    <a class="link-btn" href="https://www.instagram.com/haru._.uwu" target="_blank" rel="noopener">Instagram</a>
+    <a class="link-btn" href="https://line.me/" target="_blank" rel="noopener">LINE</a>
+    <a class="link-btn" href="https://supercell.com/en/games/brawlstars/" target="_blank" rel="noopener">Brawl Stars</a>
+  </nav>
 
-<audio id="player" src="sweettweet.mp3"></audio>
+  <footer>© 2026 はるうー</footer>
+</main>
+
+<audio id="player" src="sweettweet.mp3" preload="metadata"></audio>
 
 <script>
-  const icon = document.querySelector('.icon');
+  const disc = document.getElementById('disc');
   const player = document.getElementById('player');
   const status = document.getElementById('status');
-  let playing = false;
 
-  icon.addEventListener('click', () => {
-    if (!playing) {
+  disc.addEventListener('click', () => {
+    if (player.paused) {
       player.play();
-      status.querySelector('.song').textContent = "Sweet Tweet — playing";
-      playing = true;
+      status.textContent = "Sweet Tweet — playing";
     } else {
       player.pause();
-      status.querySelector('.song').textContent = "Sweet Tweet — paused";
-      playing = false;
+      status.textContent = "Sweet Tweet — paused";
     }
+  });
+
+  player.addEventListener('ended', () => {
+    status.textContent = "Sweet Tweet — click icon to play";
   });
 </script>
 
